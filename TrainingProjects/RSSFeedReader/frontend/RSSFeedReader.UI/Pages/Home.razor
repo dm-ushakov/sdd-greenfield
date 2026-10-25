@@ -1,0 +1,107 @@
+﻿@page "/"
+@using System.Net.Http
+@using RSSFeedReader.UI.Models
+@using RSSFeedReader.UI.Services
+@inject SubscriptionApiClient SubscriptionClient
+
+<PageTitle>Subscriptions</PageTitle>
+
+<h1>RSS Feed Subscriptions</h1>
+
+<form @onsubmit="AddSubscriptionAsync" @onsubmit:preventDefault>
+    <label for="feed-url">Feed URL</label>
+    <div class="input-group mb-3">
+        <input id="feed-url"
+               class="form-control"
+               type="text"
+               @bind="_url"
+               aria-describedby="url-validation" />
+        <button class="btn btn-primary" type="submit" disabled="@_isSubmitting">
+            Add subscription
+        </button>
+    </div>
+</form>
+
+@if (!string.IsNullOrEmpty(_validationMessage))
+{
+    <p id="url-validation" class="text-danger" role="alert">@_validationMessage</p>
+}
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <p class="text-danger" role="alert">@_errorMessage</p>
+}
+
+<h2>Subscriptions</h2>
+
+@if (_isLoading)
+{
+    <p role="status">Loading subscriptions...</p>
+}
+else if (_subscriptions.Count == 0)
+{
+    <p>No subscriptions yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var subscription in _subscriptions)
+        {
+            <li>@subscription.Url</li>
+        }
+    </ul>
+}
+
+@code {
+    private readonly List<FeedSubscription> _subscriptions = [];
+    private string _url = string.Empty;
+    private string? _validationMessage;
+    private string? _errorMessage;
+    private bool _isLoading = true;
+    private bool _isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _subscriptions.AddRange(await SubscriptionClient.GetSubscriptionsAsync());
+        }
+        catch (HttpRequestException)
+        {
+            _errorMessage = "Could not connect to the subscription service. Check that the API is running and try again.";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task AddSubscriptionAsync()
+    {
+        _validationMessage = null;
+        _errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(_url))
+        {
+            _validationMessage = "Enter a feed URL before adding a subscription.";
+            return;
+        }
+
+        _isSubmitting = true;
+
+        try
+        {
+            var subscription = await SubscriptionClient.AddSubscriptionAsync(_url);
+            _subscriptions.Add(subscription);
+            _url = string.Empty;
+        }
+        catch (HttpRequestException)
+        {
+            _errorMessage = "Could not add the subscription. Check the API connection and try again.";
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+}

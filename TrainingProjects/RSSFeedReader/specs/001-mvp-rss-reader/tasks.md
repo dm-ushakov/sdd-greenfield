@@ -12,17 +12,17 @@ independent increment.
 
 **Purpose**: Create the solution and application/test project skeletons.
 
-- [ ] T001 Create `RSSFeedReader.sln` and the .NET 10 ASP.NET Core API project at `backend/RSSFeedReader.Api/RSSFeedReader.Api.csproj`.
-- [ ] T002 [P] Create the .NET 10 standalone Blazor WebAssembly project at `frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj`.
-- [ ] T003 Add `backend/RSSFeedReader.Api.Tests/RSSFeedReader.Api.Tests.csproj` as an xUnit test project, reference the API project, and add both projects to `RSSFeedReader.sln`.
+- [X] T001 Create `RSSFeedReader.sln` and the .NET 10 ASP.NET Core API project at `backend/RSSFeedReader.Api/RSSFeedReader.Api.csproj`.
+- [X] T002 [P] Create the .NET 10 standalone Blazor WebAssembly project at `frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj`.
+- [X] T003 Add `backend/RSSFeedReader.Api.Tests/RSSFeedReader.Api.Tests.csproj` as an xUnit test project, reference the API project, and add both projects to `RSSFeedReader.sln`.
 
 ## Phase 2: Foundational
 
 **Purpose**: Establish local configuration and cross-origin access before implementing the
 subscription workflow.
 
-- [ ] T004 Configure backend and frontend local launch URLs in `backend/RSSFeedReader.Api/Properties/launchSettings.json` and `frontend/RSSFeedReader.UI/Properties/launchSettings.json` using the documented ports 5151 and 5213.
-- [ ] T005 Configure the frontend API base URL in `frontend/RSSFeedReader.UI/wwwroot/appsettings.json` and restrict API CORS in `backend/RSSFeedReader.Api/Program.cs` to the documented local frontend origins.
+- [X] T004 Configure backend and frontend local launch URLs in `backend/RSSFeedReader.Api/Properties/launchSettings.json` and `frontend/RSSFeedReader.UI/Properties/launchSettings.json` using the documented ports 5151 and 5213.
+- [X] T005 Configure the frontend API base URL in `frontend/RSSFeedReader.UI/wwwroot/appsettings.json` and restrict API CORS in `backend/RSSFeedReader.Api/Program.cs` to the documented local frontend origins.
 
 **Checkpoint**: Project skeletons and local API/frontend configuration are ready for User Story 1.
 
@@ -37,13 +37,13 @@ the API and verify the list is empty.
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Define the `FeedSubscription` URL model in `backend/RSSFeedReader.Api/Models/FeedSubscription.cs`; require a non-whitespace URL and do not validate reachability or feed format.
-- [ ] T007 [US1] Implement a thread-safe process-local subscription store in `backend/RSSFeedReader.Api/Services/InMemorySubscriptionStore.cs`; preserve submission order, accept duplicate URLs, and retain entries only until API shutdown.
-- [ ] T008 [US1] Add unit tests for ordered additions, duplicate acceptance, and blank-value rejection in `backend/RSSFeedReader.Api.Tests/Services/InMemorySubscriptionStoreTests.cs`.
-- [ ] T009 [US1] Implement `GET /api/subscriptions` and `POST /api/subscriptions` with the documented JSON shapes and 400 response for missing, empty, or whitespace-only URLs in `backend/RSSFeedReader.Api/Endpoints/SubscriptionEndpoints.cs`, then map the endpoints in `backend/RSSFeedReader.Api/Program.cs`.
-- [ ] T010 [US1] Add API integration tests for empty-list GET, successful POST followed by GET, and invalid POST returning 400 without adding an entry in `backend/RSSFeedReader.Api.Tests/SubscriptionsApiTests.cs`.
-- [ ] T011 [P] [US1] Implement a frontend client for GET and POST `/api/subscriptions` using the configured API base URL in `frontend/RSSFeedReader.UI/Services/SubscriptionApiClient.cs` and register it in `frontend/RSSFeedReader.UI/Program.cs`.
-- [ ] T012 [US1] Replace the starter home/demo UI with an accessible add-and-list subscription page in `frontend/RSSFeedReader.UI/Pages/Home.razor`; load the current list, display each URL, submit additions immediately, reject blank input, show actionable request failures, and remove obsolete demo navigation links.
+- [X] T006 [P] [US1] Define the `FeedSubscription` URL model in `backend/RSSFeedReader.Api/Models/FeedSubscription.cs`; require a non-whitespace URL and do not validate reachability or feed format.
+- [X] T007 [US1] Implement a thread-safe process-local subscription store in `backend/RSSFeedReader.Api/Services/InMemorySubscriptionStore.cs`; preserve submission order, accept duplicate URLs, and retain entries only until API shutdown.
+- [X] T008 [US1] Add unit tests for ordered additions, duplicate acceptance, and blank-value rejection in `backend/RSSFeedReader.Api.Tests/Services/InMemorySubscriptionStoreTests.cs`.
+- [X] T009 [US1] Implement `GET /api/subscriptions` and `POST /api/subscriptions` with the documented JSON shapes and 400 response for missing, empty, or whitespace-only URLs in `backend/RSSFeedReader.Api/Endpoints/SubscriptionEndpoints.cs`, then map the endpoints in `backend/RSSFeedReader.Api/Program.cs`.
+- [X] T010 [US1] Add API integration tests for empty-list GET, successful POST followed by GET, and invalid POST returning 400 without adding an entry in `backend/RSSFeedReader.Api.Tests/SubscriptionsApiTests.cs`.
+- [X] T011 [P] [US1] Implement a frontend client for GET and POST `/api/subscriptions` using the configured API base URL in `frontend/RSSFeedReader.UI/Services/SubscriptionApiClient.cs` and register it in `frontend/RSSFeedReader.UI/Program.cs`.
+- [X] T012 [US1] Replace the starter home/demo UI with an accessible add-and-list subscription page in `frontend/RSSFeedReader.UI/Pages/Home.razor`; load the current list, display each URL, submit additions immediately, reject blank input, show actionable request failures, and remove obsolete demo navigation links.
 
 **Checkpoint**: The single MVP story works independently, including its API contract, UI workflow,
 blank-input rejection, and process-local data lifecycle.
@@ -114,3 +114,5 @@ endpoints, and tests before validating the frontend workflow in T012.
   label for story tasks, and explicit file path.
 - Automated tests are included to meet the constitution's quality gates; no test-first/TDD
   workflow is assumed.
+- T013 automated build/test and HTTP scenarios passed. Interactive browser validation could not
+  be run because this environment has no installed browser or browser-automation tool.
